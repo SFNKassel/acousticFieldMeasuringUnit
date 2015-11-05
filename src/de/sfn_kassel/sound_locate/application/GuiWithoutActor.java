@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
@@ -32,6 +34,19 @@ public class GuiWithoutActor {
 		@SuppressWarnings("resource")
 		Measure m = new Measure(sampleRate);
 		MapWriter writer = new MapWriter(map);
+		
+		if(new File(fileName).exists()) {
+			BufferedReader in = new BufferedReader(new FileReader(new File(fileName)));
+			try {
+				while (true) {
+					String line = in.readLine();
+					String[] params = line.split(",");
+					map.put(new ComparablePoint(Integer.parseInt(params[0].trim()), Integer.parseInt(params[1].trim())), Double.parseDouble(params[2].trim()));
+				}
+			} catch (Exception e) {
+				in.close();
+			}
+		}
 
 		JFrame window = new JFrame("acoustic field measuring unit");
 		window.setLayout(new GridLayout(width, height));

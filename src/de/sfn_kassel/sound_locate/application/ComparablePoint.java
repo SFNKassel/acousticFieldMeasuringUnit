@@ -16,6 +16,6 @@ public class ComparablePoint implements Comparable<ComparablePoint> {
 
 	@Override
 	public String toString() {
-		return x + ", " + y;
+		return x + "," + y;
 	}
 }
