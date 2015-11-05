@@ -1,7 +1,7 @@
 # acousticFieldMeasuringUnit
 A programm for measuring different types of accoustic fields.
 
-To run the 2D measuring unit simply download the acousticFieldMeasuringUnit.jar and execute it. It requires Java 8 to run.
+To run the 2D measuring unit simply download the binary (a jar file) from [`releases`](https://github.com/SFNKassel/acousticFieldMeasuringUnit/releases/) and execute it. It requires Java 8 to run.
 
 The sampling rate of 44100 samples/second is supported by most soundcards. Some soundcards are supporting higher sampling rates (eg. 48000 s/s, 96000 s/s, 192000 s/s). 
 
