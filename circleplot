@@ -1,0 +1,5 @@
+set polar
+set angles degrees
+plot "first.csv" w lp
+
+pause -1

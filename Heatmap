@@ -1,0 +1,7 @@
+set view map
+set dgrid3d
+set pm3d interpolate 1,1
+set datafile separator ','
+splot "measurement.csv" using 1:2:3 with pm3d
+
+pause -1
