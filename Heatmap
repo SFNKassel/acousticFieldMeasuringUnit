@@ -1,6 +1,6 @@
 set view map
-set dgrid3d
-set pm3d interpolate 1,1
+set dgrid3d 25,25 gauss 1
+set pm3d interpolate 0,0
 set datafile separator ','
 splot "measurement.csv" using 1:2:3 with pm3d
 
