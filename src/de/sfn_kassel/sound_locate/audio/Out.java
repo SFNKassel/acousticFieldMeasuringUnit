@@ -6,34 +6,52 @@ import java.nio.ByteBuffer;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.SourceDataLine;
 
 public class Out implements Closeable {
-	final SourceDataLine line;
+	final Clip clip;
 	final int sampleRate;
+	final AudioFormat af;
+	boolean runnig = false;
 
 	public Out(int sampleRate) throws LineUnavailableException {
-		final AudioFormat af = new AudioFormat(sampleRate, 16, 1, true, true);
-		line = AudioSystem.getSourceDataLine(af);
-		line.open(af, sampleRate);
-		line.start();
+		af = new AudioFormat(sampleRate, 16, 1, true, true);
+		DataLine.Info info = new DataLine.Info(Clip.class, af);
+		clip = (Clip) AudioSystem.getLine(info);
 		this.sampleRate = sampleRate;
 	}
 
-	public void playSine(double freq, int duration) {
+	public void playSine(double freq, int duration) throws LineUnavailableException {
 		byte[] toneBuffer = createSinWaveBuffer(freq, duration);
-		line.write(toneBuffer, 0, toneBuffer.length);
+		clip.open(af, toneBuffer, 0, toneBuffer.length);
+		clip.addLineListener(new LineListener() {
+			
+			@Override
+			public void update(LineEvent event) {
+				if(event.getType() == LineEvent.Type.STOP) {
+					runnig = false;
+				}
+			}
+		});
+		clip.start();
+		runnig = true;
 	}
-	
+
 	public void waitToFinsh() {
-		line.drain();
+		while(runnig) {
+			Thread.yield();
+		}
+		clip.close();
 	}
 
 	@Override
 	public void close() throws IOException {
-		line.drain();
-		line.close();
+		clip.drain();
+		clip.close();
 	}
 
 	public byte[] createSinWaveBuffer(double freq, int ms) {

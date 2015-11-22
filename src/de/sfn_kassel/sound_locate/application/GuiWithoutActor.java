@@ -16,7 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import de.sfn_kassel.sound_locate.audio.MapWriter;
-import de.sfn_kassel.sound_locate.audio.Measure;
+import de.sfn_kassel.sound_locate.audio.Measurer;
 
 public class GuiWithoutActor {
 	
@@ -32,7 +32,7 @@ public class GuiWithoutActor {
 		
 		Map<ComparablePoint, Double> map = new TreeMap<>();
 		@SuppressWarnings("resource")
-		Measure m = new Measure(sampleRate);
+		Measurer m = new Measurer(sampleRate);
 		MapWriter writer = new MapWriter(map);
 		
 		if(new File(fileName).exists()) {
@@ -63,7 +63,11 @@ public class GuiWithoutActor {
 						int x = Integer.parseInt(e.getActionCommand().split("\\(")[1].split("\\|")[0]);
 						int y = Integer.parseInt(e.getActionCommand().split("\\|")[1].split("\\)")[0]);
 //						System.out.println("(" + x + "|" + y + ")");
-						map.put(new ComparablePoint(x, y), m.measure(measureFreq, measureTime));
+						try {
+							map.put(new ComparablePoint(x, y), m.measure(measureFreq, measureTime));
+						} catch (LineUnavailableException e2) {
+							e2.printStackTrace();
+						}
 						try {
 							writer.writeToCsv(new File(fileName), ",", "\n");
 						} catch (IOException e1) {
