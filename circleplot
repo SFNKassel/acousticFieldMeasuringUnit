@@ -1,5 +1,6 @@
 set polar
 set angles degrees
-plot "first.csv" w lp
+set size square
+plot "14.11.2015_01_19cm_3degreesPositioningError.csv" w lp
 
 pause -1
