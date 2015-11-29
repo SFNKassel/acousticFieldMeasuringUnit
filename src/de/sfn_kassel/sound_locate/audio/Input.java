@@ -57,8 +57,7 @@ public class Input implements Closeable{
 	}
 
 	public ArrayList<Double> stopRecording() {
-		while (thread.isAlive())
-			;
+		while (thread.isAlive());
 		line.stop();
 		return doubles;
 	}
