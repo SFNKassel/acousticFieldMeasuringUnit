@@ -24,32 +24,34 @@ public class Input implements Closeable{
 		line.open(af);
 	}
 
-	public void startRecording() {
+	public void startRecording(int ms, int samples) {
 		running = true;
 		thread = new Thread(new Runnable() {
 			public void run() {
 				line.start();
 
-				byte[] data = new byte[line.getBufferSize() / 5];
+				int runs = (int) (((float) ((float) ms / 1000.0) * (float) samples) / (float) line.getBufferSize());
+				byte[] data = new byte[line.getBufferSize()];
 				doubles = new ArrayList<>();
 
-				while (running) {
+				System.out.println(runs);
+
+				for (int i = 0; i < runs; i++) {
 					line.read(data, 0, data.length);
 					ByteBuffer buffer = ByteBuffer.allocate(data.length);
 					buffer.put(data);
 					buffer.rewind();
-//					for (byte b : data) {
-//						System.out.println(b);
-//					}
+
 					while (true) {
 						try {
-							double d = buffer.getShort() / (double)Short.MAX_VALUE;
+							double d = buffer.getShort() / (double) Short.MAX_VALUE;
 							doubles.add(d);
 						} catch (BufferUnderflowException ignore) {
 							break;
 						}
 					}
-//					System.out.println(doubles.size());
+
+					System.out.println(i);
 				}
 			}
 		});
@@ -57,7 +59,6 @@ public class Input implements Closeable{
 	}
 
 	public ArrayList<Double> stopRecording() {
-		running = false;
 		while (thread.isAlive())
 			;
 		line.stop();

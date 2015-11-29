@@ -64,9 +64,11 @@ public class GuiWithoutActor {
 						int y = Integer.parseInt(e.getActionCommand().split("\\|")[1].split("\\)")[0]);
 //						System.out.println("(" + x + "|" + y + ")");
 						try {
-							map.put(new ComparablePoint(x, y), m.measure(measureFreq, measureTime));
+							map.put(new ComparablePoint(x, y), m.measure(measureFreq, measureTime, sampleRate));
 						} catch (LineUnavailableException e2) {
 							e2.printStackTrace();
+						} catch (InterruptedException e1) {
+							e1.printStackTrace();
 						}
 						try {
 							writer.writeToCsv(new File(fileName), ",", "\n");
