@@ -43,6 +43,10 @@ public class Out implements Closeable {
 		runnig = true;
 	}
 
+	public boolean finished() {
+		return runnig;
+	}
+
 	public void waitToFinsh() {
 		while(runnig) {
 			//System.out.println(clip.getMicrosecondPosition());

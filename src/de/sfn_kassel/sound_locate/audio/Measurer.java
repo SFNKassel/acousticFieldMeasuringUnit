@@ -30,9 +30,8 @@ public class Measurer implements Closeable{
 
 		double ret = 0;
 		out.playSine(freq, time);
-		in.startRecording(time, samples);
+		in.startRecording(time, samples, out);
 		ret = in.stopRecordingGiveRms();
-		out.waitToFinsh();
 		return ret;
 	}
 	
