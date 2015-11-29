@@ -34,8 +34,6 @@ public class Input implements Closeable{
 				byte[] data = new byte[line.getBufferSize()];
 				doubles = new ArrayList<>();
 
-				System.out.println(runs);
-
 				for (int i = 0; i < runs; i++) {
 					line.read(data, 0, data.length);
 					ByteBuffer buffer = ByteBuffer.allocate(data.length);
