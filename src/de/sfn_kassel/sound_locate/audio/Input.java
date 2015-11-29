@@ -50,8 +50,6 @@ public class Input implements Closeable{
 							break;
 						}
 					}
-
-					System.out.println(i);
 				}
 			}
 		});
