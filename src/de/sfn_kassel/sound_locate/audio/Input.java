@@ -24,7 +24,7 @@ public class Input implements Closeable{
 		line.open(af);
 	}
 
-	public void startRecording(int ms, int samples, Out out) {
+	public void startRecording(int ms, int samples) {
 		running = true;
 		thread = new Thread(new Runnable() {
 			public void run() {
@@ -32,10 +32,10 @@ public class Input implements Closeable{
 
 				int parts = (line.getBufferSize() / 50) % 2 == 0 ? 50 : 100;
 
-				byte[] data = new byte[line.getBufferSize() / 50];
+				byte[] data = new byte[line.getBufferSize() / (parts / 2)];
 				doubles = new ArrayList<>();
 
-				while (out.runnig) {
+				while (running) {
 					line.read(data, 0, data.length);
 					ByteBuffer buffer = ByteBuffer.allocate(data.length);
 					buffer.put(data);
@@ -50,7 +50,7 @@ public class Input implements Closeable{
 						}
 					}
 				}
-				for (int i = 0; i < line.getBufferSize() / 50; i++) {
+				for (int i = 0; i < line.getBufferSize() / parts; i++) {
 					doubles.remove(doubles.size() - 1);
 				}
 			}
@@ -59,6 +59,7 @@ public class Input implements Closeable{
 	}
 
 	public ArrayList<Double> stopRecording() {
+		running = false;
 		while (thread.isAlive());
 		line.stop();
 		return doubles;

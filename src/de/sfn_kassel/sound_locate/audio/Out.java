@@ -3,7 +3,6 @@ package de.sfn_kassel.sound_locate.audio;
 import java.io.Closeable;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.concurrent.CountDownLatch;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -17,7 +16,7 @@ public class Out implements Closeable {
 	final Clip clip;
 	final int sampleRate;
 	final AudioFormat af;
-	boolean runnig = false;
+	boolean running = false;
 
 	public Out(int sampleRate) throws LineUnavailableException {
 		af = new AudioFormat(sampleRate, 16, 1, true, true);
@@ -34,21 +33,21 @@ public class Out implements Closeable {
 			@Override
 			public void update(LineEvent event) {
 				if(event.getType() == LineEvent.Type.STOP) {
-					runnig = false;
+					running = false;
 				}
 			}
 		});
 
 		clip.start();
-		runnig = true;
+		running = true;
 	}
 
 	public boolean finished() {
-		return runnig;
+		return running;
 	}
 
 	public void waitToFinsh() {
-		while(runnig) {
+		while(running) {
 			//System.out.println(clip.getMicrosecondPosition());
 
 			Thread.yield();
