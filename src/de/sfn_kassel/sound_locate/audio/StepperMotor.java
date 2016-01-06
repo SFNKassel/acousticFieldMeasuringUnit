@@ -27,14 +27,6 @@ public class StepperMotor implements Closeable {
 		motor.moveTo(0, 50);
 		motor.close();
 	}
-	
-	public void moveTo(double pos, double speed) throws LineUnavailableException {
-		if (pos == position) {
-			return;
-		}
-		
-		doSteps(pos - position, speed, position);
-	}
 
 	public StepperMotor(int sampleRate) throws LineUnavailableException {
 		af = new AudioFormat(sampleRate, 16, 2, true, true);
@@ -43,13 +35,21 @@ public class StepperMotor implements Closeable {
 		this.sampleRate = sampleRate;
 	}
 
+	public void moveTo(double pos, double speed) throws LineUnavailableException {
+		if (pos == position) {
+			return;
+		}
+
+		doSteps(pos - position, speed, position);
+	}
+
 	private void startplay(byte[] toneBuffer) throws LineUnavailableException {
 		clip.open(af, toneBuffer, 0, toneBuffer.length);
 		clip.addLineListener(new LineListener() {
 
 			@Override
 			public void update(LineEvent event) {
-//				System.out.println(event);
+				// System.out.println(event);
 				if (event.getType() == LineEvent.Type.STOP) {
 					runnig = false;
 				}
@@ -60,7 +60,8 @@ public class StepperMotor implements Closeable {
 	}
 
 	public void doSteps(double steps, double speed, double start) throws LineUnavailableException {
-		byte[] toneBuffer = createSinWaveBuffer(speed, Math.abs(steps), start,steps < 0 ? .5  * Math.PI : -.5  * Math.PI);
+		byte[] toneBuffer = createSinWaveBuffer(speed, Math.abs(steps), start,
+				steps < 0 ? .5 * Math.PI : -.5 * Math.PI);
 		startplay(toneBuffer);
 		waitToFinsh();
 		position += steps;
@@ -83,7 +84,7 @@ public class StepperMotor implements Closeable {
 		int samples = (int) Math.ceil((steps / freq) * 2 * sampleRate);
 		double[] output = new double[samples];
 		for (int i = 0; i < output.length; i += 2) {
-			double time = ((double)i / sampleRate) / 2;
+			double time = ((double) i / sampleRate) / 2;
 			double angle = 2 * Math.PI * time * freq;
 			output[i] = Math.sin(angle + start);
 			output[i + 1] = Math.sin(angle + relativeAngle + start);

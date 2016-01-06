@@ -1,6 +1,5 @@
-set polar
-set angles degrees
-set size square
+set yrange[0:]
+
 plot "goodMicMeasurement1.csv" w lp
 replot "goodMicMeasurement2.csv" w lp
 replot "goodMicMeasurement3.csv" w lp

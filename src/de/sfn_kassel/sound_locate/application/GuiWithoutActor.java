@@ -23,7 +23,7 @@ public class GuiWithoutActor {
 	final double visualMultiplyer;
 
 	public static void main(String[] args) throws LineUnavailableException, IOException {
-		new GuiWithoutActor(10, 10, 1000, 1000, 44100, "measurement.csv", 3);
+		new GuiWithoutActor(10, 10, 1000, 1000, 48000, "measurement.csv", 3);
 	}
 
 	public GuiWithoutActor(int width, int height, int measureTime, int measureFreq, int sampleRate, String fileName, int visualMultiplyer)
@@ -32,7 +32,7 @@ public class GuiWithoutActor {
 		
 		Map<ComparablePoint, Double> map = new TreeMap<>();
 		@SuppressWarnings("resource")
-		Measurer m = new Measurer(sampleRate);
+		Measurer m = new Measurer(48000);
 		MapWriter writer = new MapWriter(map);
 		
 		if(new File(fileName).exists()) {
