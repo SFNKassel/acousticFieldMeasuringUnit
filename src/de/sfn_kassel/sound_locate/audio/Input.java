@@ -25,7 +25,7 @@ public class Input implements Closeable{
 		line.open(af);
 	}
 
-	public void startRecording() {
+	public void startRecording(int ms) {
 		running = true;
 		thread = new Thread(new Runnable() {
 			public void run() {
@@ -45,13 +45,12 @@ public class Input implements Closeable{
 					
 					while (true) {
 						try {
-							double d = buffer.getShort() / (double)Short.MAX_VALUE;
+							double d = buffer.getShort() / (double) Short.MAX_VALUE;
 							doubles.add(d);
 						} catch (BufferUnderflowException ignore) {
 							break;
 						}
 					}
-//					System.out.println(doubles.size());
 				}
 			}
 		});
@@ -60,8 +59,7 @@ public class Input implements Closeable{
 
 	public ArrayList<Double> stopRecording() {
 		running = false;
-		while (thread.isAlive())
-			;
+		while (thread.isAlive());
 		line.stop();
 		return doubles;
 	}

@@ -9,7 +9,7 @@ public class Measurer implements Closeable{
 	final Out out;
 	final Input in;
 	
-	public static void main(String[] args) throws LineUnavailableException, IOException {
+	public static void main(String[] args) throws LineUnavailableException, IOException, InterruptedException {
 		int SAMPLE_RATE = 44100;
 		Measurer m = new Measurer(SAMPLE_RATE);
 		while (true) {
@@ -25,11 +25,21 @@ public class Measurer implements Closeable{
 		this.in = new Input(sampleRate);
 	}
 
-	public double measure(int freq, int time) throws LineUnavailableException {
-		in.startRecording();
-		out.playSine(freq, time);
-		out.waitToFinsh();
-		return in.stopRecordingGiveRms();
+	public double measure(int freq, int time) throws LineUnavailableException, InterruptedException {
+		try {
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		double ret = 0;
+		//out.playSine(freq, time);
+		in.startRecording(time);
+
+		Thread.sleep(time);
+
+		ret = in.stopRecordingGiveRms();
+		return ret;
 	}
 	
 	@Override

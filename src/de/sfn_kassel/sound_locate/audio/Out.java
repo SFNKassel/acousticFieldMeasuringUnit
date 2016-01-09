@@ -16,7 +16,7 @@ public class Out implements Closeable {
 	final Clip clip;
 	final int sampleRate;
 	final AudioFormat af;
-	boolean runnig = false;
+	boolean running = false;
 
 	public Out(int sampleRate) throws LineUnavailableException {
 		af = new AudioFormat(sampleRate, 16, 1, true, true);
@@ -28,21 +28,28 @@ public class Out implements Closeable {
 	public void playSine(double freq, int duration) throws LineUnavailableException {
 		byte[] toneBuffer = createSinWaveBuffer(freq, duration);
 		clip.open(af, toneBuffer, 0, toneBuffer.length);
+
 		clip.addLineListener(new LineListener() {
-			
 			@Override
 			public void update(LineEvent event) {
 				if(event.getType() == LineEvent.Type.STOP) {
-					runnig = false;
+					running = false;
 				}
 			}
 		});
+
 		clip.start();
-		runnig = true;
+		running = true;
+	}
+
+	public boolean finished() {
+		return running;
 	}
 
 	public void waitToFinsh() {
-		while(runnig) {
+		while(running) {
+			//System.out.println(clip.getMicrosecondPosition());
+
 			Thread.yield();
 		}
 		clip.close();
@@ -56,7 +63,7 @@ public class Out implements Closeable {
 
 	public byte[] createSinWaveBuffer(double freq, int ms) {
 		int samples = (int) ((ms * sampleRate) / 1000);
-		double[] output = new double[samples];
+		double[] output = new double[samples + 500];
 		double period = (double) sampleRate / freq;
 		for (int i = 0; i < output.length; i++) {
 			double angle = 2.0 * Math.PI * i / period;

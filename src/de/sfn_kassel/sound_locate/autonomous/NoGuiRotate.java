@@ -29,7 +29,7 @@ public class NoGuiRotate {
 		for (double i = 0; i < 360; i += STEP_SIZE) {
 			motor.moveTo(-i, 50);
 			Thread.sleep(SLEEP_TIME);
-			double value = m.measure(MEASURE_FREQ, MEASURE_TIME);
+			double value = m.measure(MEASURE_FREQ, MEASURE_TIME, SAMPLE_RATE);
 			map.put(i, value);
 			System.out.println(i + ", " + value);
 //			Thread.sleep(SLEEP_TIME);
