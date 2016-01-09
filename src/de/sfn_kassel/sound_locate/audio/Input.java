@@ -21,6 +21,7 @@ public class Input implements Closeable{
 		final AudioFormat af = new AudioFormat(sampleRate, 16, 1, true, true);
 		DataLine.Info info = new DataLine.Info(TargetDataLine.class, af);
 		line = (TargetDataLine) AudioSystem.getLine(info);
+//		System.out.println(line.getLineInfo());
 		line.open(af);
 	}
 
@@ -30,7 +31,7 @@ public class Input implements Closeable{
 			public void run() {
 				line.start();
 
-				byte[] data = new byte[line.getBufferSize() / 5];
+				byte[] data = new byte[10];
 				doubles = new ArrayList<>();
 
 				while (running) {
@@ -41,6 +42,7 @@ public class Input implements Closeable{
 //					for (byte b : data) {
 //						System.out.println(b);
 //					}
+					
 					while (true) {
 						try {
 							double d = buffer.getShort() / (double)Short.MAX_VALUE;

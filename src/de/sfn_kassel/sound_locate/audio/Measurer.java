@@ -12,8 +12,12 @@ public class Measurer implements Closeable{
 	public static void main(String[] args) throws LineUnavailableException, IOException {
 		int SAMPLE_RATE = 44100;
 		Measurer m = new Measurer(SAMPLE_RATE);
-		System.out.println(m.measure(1000, 1000));
-		m.close();
+		while (true) {
+			System.out.print(m.measure(1000, 1000));
+			System.in.read();
+			System.in.read();
+		}
+//		m.close();
 	}
 	
 	public Measurer(int sampleRate) throws LineUnavailableException, IOException {

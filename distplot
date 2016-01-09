@@ -1,0 +1,5 @@
+plot "distance.csv" w lp
+replot "distKP.csv" w lp
+replot "distPerfect.csv" w lp
+
+pause -1
